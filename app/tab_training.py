@@ -291,7 +291,7 @@ def _render_model_table():
     styled = (
         df.style
         .apply(highlight_best, axis=0)
-        .format({"Val F1": "{:.3f}", "Test F1": "{:.3f}"}, na_rep="—")
+        .format({"Val F1": "{:.3f}", "Test F1": "{:.3f}"}, na_rep="-")
     )
 
     st.dataframe(styled, use_container_width=True, hide_index=True, height=390)
@@ -340,7 +340,7 @@ def _render_model_detail():
                 st.metric("Validation F1", f"{float(metrics.get('val_macro_f1', 0) or 0):.3f}")
             with metric_cols[1]:
                 test_f1 = ALL_TEST_F1.get(info["key"])
-                st.metric("Test F1", "—" if test_f1 is None else f"{test_f1:.3f}")
+                st.metric("Test F1", "-" if test_f1 is None else f"{test_f1:.3f}")
             with metric_cols[2]:
                 st.metric("Parameters", _fmt_params_display(metrics))
 
@@ -402,16 +402,151 @@ def _render_v1_v2_comparison():
                 delta=f"{improvement:+.1f}% from V1 ({v1:.3f})",
             )
 
+def _render_methodology():
+    """Research rationale and model selection methodology."""
+    
+    st.subheader("Methodology")
+    
+    st.markdown("##### The Cross-Subject Challenge")
+    st.markdown(
+        "Cross-subject motor imagery classification is one of the hardest problems in EEG-based "
+        "brain-computer interfaces. Each person's brain produces subtly different electrical "
+        "patterns - electrode impedances vary, cortical folding differs, and the spatial "
+        "distribution of motor imagery signals shifts across individuals. The discriminative "
+        "signal I'm detecting (event-related desynchronization in the mu and beta frequency "
+        "bands over motor cortex) is typically just 1–2 dB of power difference between "
+        "hemispheres. With only ~45 usable epochs per subject across 3 runs, the model must "
+        "learn from limited, highly variable data."
+    )
+    
+    st.markdown("##### Why Three Model Families")
+    st.markdown(
+        "I chose models that form a progression from fully hand-designed "
+        "to fully learned, each relaxing one assumption from the previous:"
+    )
+    
+    st.dataframe(
+        pd.DataFrame([
+            {
+                "Family": "Classical (RF, XGBoost)",
+                "Hand-designed": "Features (mu/beta power), channels (C3/Cz/C4)",
+                "Learned": "Decision boundaries only",
+                "Rationale": "Neuroscience-informed baseline - tests whether known EEG features are sufficient",
+            },
+            {
+                "Family": "Spatial (CSP+LDA)",
+                "Hand-designed": "Frequency band (8–30 Hz)",
+                "Learned": "Optimal spatial filters across 64 channels",
+                "Rationale": "Classical BCI gold standard - learns WHERE to look on the scalp",
+            },
+            {
+                "Family": "Deep Learning (EEGNet, TCNet, FBCNet)",
+                "Hand-designed": "Architecture inductive biases only",
+                "Learned": "Spatial filters, temporal filters, and features jointly",
+                "Rationale": "End-to-end learning - tests whether the model can discover better representations",
+            },
+        ]),
+        use_container_width=True,
+        hide_index=True,
+    )
+    
+    st.markdown("##### V1 → V2: Diagnosing Before Scaling")
+    st.markdown(
+        "My V1 pipeline achieved 70.9% F1 with EEGNet but only 55–57% with classical models. "
+        "Before adding more architectures, I diagnosed three root causes:\n\n"
+        "**1. Data loss from over-aggressive artifact rejection.** "
+        "The 150 µV peak-to-peak threshold dropped 47% of epochs. "
+        "Since the 8 - 30 Hz bandpass already removes the worst artifacts, "
+        "I relaxed to 300 µV to recover around 2,200 epochs and doubling the effective training set.\n\n"
+        "**2. Inter-subject covariance mismatch.** "
+        "Spatial filters learned on one subject don't transfer well to another. "
+        "I added Euclidean Alignment - a parameter-free whitening step that maps each subject's "
+        "covariance to a common reference space.\n\n"
+        "**3. Feature starvation in classical models.** "
+        "V1's Random Forest had only 6 features. "
+        "I expanded to 31 features including relative band powers, Hjorth parameters, "
+        "inter-channel coherence, and hemispheric asymmetry indices."
+    )
+    
+    st.markdown("##### EEG-TCNet and FBCNet: Targeted Architecture Choices")
+    st.markdown(
+        "**EEG-TCNet** (Ingolfsson 2020) replaces EEGNet's final block with a Temporal Convolutional "
+        "Network using dilated causal convolutions, extending the temporal receptive field from "
+        "~0.4s to ~3.0s to capture how desynchronization evolves over the full imagery period.\n\n"
+        "**FBCNet** (Mane 2021) pre-defines a filter bank of 5 overlapping bands and learns separate "
+        "spatial filters per band, mirroring CSP's log-variance pipeline in an end-to-end trainable form.\n\n"
+        "Both underperformed EEGNet in cross-subject evaluation "
+        "(TCNet: 0.675, FBCNet: 0.703 vs EEGNet: 0.757). "
+        "This is consistent with findings that these architectures benefit most from "
+        "within-subject calibration data rather than global cross-subject training."
+    )
+    
+    st.markdown("##### Final Model Selection")
+    st.markdown(
+        "**EEGNet (V2) is the primary inference model** at 0.757 test macro-F1. "
+        "It achieved the highest cross-subject performance with only 2,770 parameters. "
+        "All other trained models remain available for comparison. "
+        "A stacking ensemble of the three deep models (0.707 F1) did not improve over standalone "
+        "EEGNet because the weaker base models added noise rather than complementary signal."
+    )
+    
+    st.divider()
+
+
+def _render_limitations_and_future():
+    """Limitations and future research directions."""
+    
+    st.subheader("Limitations & Future Directions")
+    
+    st.markdown("##### Current Limitations")
+    st.markdown(
+        "**1. No subject-specific adaptation.** "
+        "All models are trained globally across 80 subjects and applied to unseen subjects "
+        "without calibration. Even a few seconds of per-user calibration data would "
+        "dramatically improve accuracy. "
+        "The 0.757 F1 ceiling likely reflects this constraint more than any architectural limitation.\n\n"
+        "**2. Binary classification only.** "
+        "The current pipeline classifies left vs right fist imagery. "
+        "The PhysioNet dataset also contains feet and both-fists imagery (runs 6, 10, 14) "
+        "that could extend this to a 4-class problem.\n\n"
+        "**3. Fixed epoch window.** "
+        "I use a fixed 0–4 second post-cue window. "
+        "Motor imagery onset latency varies across individuals - "
+        "an adaptive windowing strategy could capture each subject's optimal imagery period.\n\n"
+        "**4. No ICA-based artifact removal.** "
+        "I rely on bandpass filtering and a 300 µV threshold. "
+        "ICA would improve signal quality at the cost of pipeline complexity."
+    )
+    
+    st.markdown("##### Future Directions")
+    st.markdown(
+        "**1. Transfer learning with subject adaptation.** "
+        "Fine-tune the global EEGNet on a small number of calibration epochs from a new subject. "
+        "Even 10–20 labeled epochs could push accuracy above 80%.\n\n"
+        "**2. Attention-based architectures.** "
+        "EEG-Conformer and ATCNet use self-attention to capture "
+        "long-range temporal dependencies and cross-channel relationships simultaneously.\n\n"
+        "**3. Multimodal fusion for fatigue detection.** "
+        "This project focused on motor imagery classification as a foundation for EEG signal processing. "
+        "The natural extension is combining EEG with wearable sensor data (heart rate, "
+        "skin conductance, accelerometry) for fatigue detection. The preprocessing pipeline, "
+        "feature extraction, and model evaluation framework developed here transfer directly "
+        "to that multimodal setting.\n\n"
+        "**4. Deeper explainability.** "
+        "Gradient-based saliency maps showing which time-frequency regions EEGNet attends to, "
+        "CSP spatial pattern visualization, and per-epoch confidence calibration analysis."
+    )
 
 def render_training_tab():
     """Render the complete training summary tab."""
+    _render_methodology()
     st.subheader("Development Journey: V1 → V2")
     st.markdown(
-        "We systematically improved the pipeline across two iterations. "
+        "I systematically improved the pipeline across two iterations. "
         "V1 used conservative artifact rejection (150 µV), training on ~1,850 epochs. "
         "V2 relaxed rejection to 300 µV, added Euclidean Alignment for cross-subject "
         "normalization, enriched features from 6 to 31 dimensions, and introduced "
-        "additional model architectures — recovering ~2,200 additional training epochs. "
+        "additional model architectures - recovering ~2,200 additional training epochs. "
         "The numbers below are held-out subject test Macro-F1 scores."
     )
     _render_v1_v2_comparison()
@@ -431,9 +566,11 @@ def render_training_tab():
     _render_model_table()
 
     st.divider()
-    st.subheader("All Models — Test Performance")
+    st.subheader("All Models - Test Performance")
     st.plotly_chart(_render_all_models_chart(), use_container_width=True)
 
     st.divider()
     st.subheader("Model Detail")
     _render_model_detail()
+    st.divider()
+    _render_limitations_and_future()
