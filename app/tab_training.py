@@ -172,6 +172,7 @@ def _render_pipeline_sankey():
     )])
 
     fig.update_layout(
+        template="plotly_white",        # ← add this line
         height=430,
         margin=dict(l=10, r=10, t=20, b=10),
         paper_bgcolor="white",
