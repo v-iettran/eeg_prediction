@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+data/
+*.npz
+.DS_Store
+.cursor/
+physionet.org/
+PIPELINE_PLAN.md
+PIPELINE_PLAN_V2.md
+STREAMLIT_PLAN.md
+STREAMLIT_IMPROVEMENTS.md
+STREAMLIT_FIXES_R2.md
+instruction.md

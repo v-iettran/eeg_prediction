@@ -1,0 +1,85 @@
+{
+  "model_name": "csp_lda",
+  "training_date": "2026-05-07T19:41:16.440128+00:00",
+  "windows_evaluated": [
+    {
+      "window": [
+        0.0,
+        4.0
+      ],
+      "val_accuracy": 0.6647058823529411,
+      "val_macro_f1": 0.6646014329722059,
+      "val_confusion_matrix": [
+        [
+          116,
+          55
+        ],
+        [
+          59,
+          110
+        ]
+      ],
+      "training_time_sec": 48.93581491702935,
+      "best_n_components": 4
+    },
+    {
+      "window": [
+        0.5,
+        2.5
+      ],
+      "val_accuracy": 0.6541554959785523,
+      "val_macro_f1": 0.6527177325644338,
+      "val_confusion_matrix": [
+        [
+          110,
+          77
+        ],
+        [
+          52,
+          134
+        ]
+      ],
+      "training_time_sec": 29.296659707964864,
+      "best_n_components": 4
+    }
+  ],
+  "winning_window": [
+    0.0,
+    4.0
+  ],
+  "winning_n_components": 4,
+  "test_metrics": {
+    "accuracy": 0.5709459459459459,
+    "macro_f1": 0.5705489232878277,
+    "per_class_f1": [
+      0.5574912891986062,
+      0.5836065573770491
+    ],
+    "confusion_matrix": [
+      [
+        80,
+        66
+      ],
+      [
+        61,
+        89
+      ]
+    ]
+  },
+  "model_config": {
+    "csp": {
+      "estimator": "mne.decoding.CSP",
+      "n_components": 4,
+      "reg": "ledoit_wolf",
+      "log": true,
+      "norm_trace": false
+    },
+    "classifier": "sklearn.discriminant_analysis.LinearDiscriminantAnalysis",
+    "channels": "all 64 EEG channels",
+    "cv": "GroupKFold(n_splits=5) with subject-disjoint folds"
+  },
+  "n_train_epochs": 1849,
+  "n_val_epochs": 340,
+  "n_test_epochs": 296,
+  "model_artifact": "models/csp_lda_w0.0-4.0.joblib"
+}

@@ -1,0 +1,51 @@
+{
+  "phase": "D",
+  "data_version": "v2",
+  "rejection_threshold_uv": 300,
+  "training_date": "2026-05-09T22:05:06.120099+00:00",
+  "window": [
+    0.0,
+    4.0
+  ],
+  "n_train_epochs": 3119,
+  "n_val_epochs": 487,
+  "n_test_epochs": 487,
+  "models": {
+    "v2_csp_lda": {
+      "val_accuracy": 0.6817248459958932,
+      "val_macro_f1": 0.6815905917686411,
+      "val_confusion_matrix": [
+        [
+          161,
+          83
+        ],
+        [
+          72,
+          171
+        ]
+      ],
+      "best_n_components": 8,
+      "training_time_sec": 74.43029729201226,
+      "model_artifact": "models/v2_csp_lda.joblib"
+    },
+    "v2_eegnet": {
+      "val_accuracy": 0.7885010266940452,
+      "val_macro_f1": 0.7882724882129728,
+      "val_confusion_matrix": [
+        [
+          200,
+          44
+        ],
+        [
+          59,
+          184
+        ]
+      ],
+      "n_params": 2770,
+      "n_train_history_epochs": 74,
+      "training_time_sec": 317.7026490420103,
+      "model_artifact": "models/v2_eegnet.pt",
+      "device": "mps"
+    }
+  }
+}

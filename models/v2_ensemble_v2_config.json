@@ -1,0 +1,20 @@
+{
+  "meta_learner_path": "models/v2_ensemble_v2_meta.joblib",
+  "base_models": [
+    {
+      "name": "v2_eegnet",
+      "input_type": "raw_64ch",
+      "model_path": "models/v2_eegnet.pt"
+    },
+    {
+      "name": "v2_tcnet",
+      "input_type": "raw_64ch",
+      "model_path": "models/v2_tcnet.pt"
+    },
+    {
+      "name": "v2_fbcnet",
+      "input_type": "filter_bank_64ch",
+      "model_path": "models/v2_fbcnet.pt"
+    }
+  ]
+}

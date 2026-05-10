@@ -1,0 +1,61 @@
+{
+  "phase": "F-fixed",
+  "data_version": "v2",
+  "training_date": "2026-05-09T22:12:14.486750+00:00",
+  "window": [
+    0.0,
+    4.0
+  ],
+  "fixes": [
+    "euclidean_alignment",
+    "unified_8-30Hz_bandpass_for_fbcnet",
+    "overlapping_filter_bands",
+    "multi_window_variance",
+    "lr_1e-4_with_warmup",
+    "label_smoothing_0.1",
+    "patience_30",
+    "tcnet_dropout_0.4_maxnorm_1.0",
+    "fbcnet_dropout_0.1"
+  ],
+  "models": {
+    "v2_tcnet": {
+      "val_accuracy": 0.6981519507186859,
+      "val_macro_f1": 0.6925042845545566,
+      "val_confusion_matrix": [
+        [
+          203,
+          41
+        ],
+        [
+          106,
+          137
+        ]
+      ],
+      "n_params": 9810,
+      "n_train_history_epochs": 116,
+      "training_time_sec": 475.66514366702177,
+      "model_artifact": "models/v2_tcnet.pt"
+    },
+    "v2_fbcnet": {
+      "val_accuracy": 0.7166324435318275,
+      "val_macro_f1": 0.7166216899983133,
+      "val_confusion_matrix": [
+        [
+          176,
+          68
+        ],
+        [
+          70,
+          173
+        ]
+      ],
+      "n_params": 2962,
+      "n_train_history_epochs": 154,
+      "training_time_sec": 354.7425363329821,
+      "model_artifact": "models/v2_fbcnet.pt"
+    }
+  },
+  "n_train_epochs": 3119,
+  "n_val_epochs": 487,
+  "n_test_epochs": 487
+}

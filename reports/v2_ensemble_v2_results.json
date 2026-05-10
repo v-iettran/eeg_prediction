@@ -1,0 +1,83 @@
+{
+  "model_name": "v2_deep_ensemble_fixed",
+  "training_date": "2026-05-09T22:27:28.877884+00:00",
+  "data_version": "v2",
+  "fixes_applied": [
+    "euclidean_alignment",
+    "unified_bandpass",
+    "overlapping_filter_bands",
+    "multi_window_variance",
+    "lr_warmup",
+    "label_smoothing",
+    "patience_30"
+  ],
+  "n_val_epochs": 487,
+  "n_test_epochs": 487,
+  "base_models": [
+    {
+      "name": "v2_eegnet",
+      "input_type": "raw_64ch",
+      "val_macro_f1": 0.7882724882129728,
+      "test_macro_f1": 0.7508298342868499
+    },
+    {
+      "name": "v2_tcnet",
+      "input_type": "raw_64ch",
+      "val_macro_f1": 0.6925042845545566,
+      "test_macro_f1": 0.6745656420273466
+    },
+    {
+      "name": "v2_fbcnet",
+      "input_type": "filter_bank_64ch",
+      "val_macro_f1": 0.7166216899983133,
+      "test_macro_f1": 0.7034004398578921
+    }
+  ],
+  "ensemble_test_metrics": {
+    "accuracy": 0.7515400410677618,
+    "macro_f1": 0.7508298342868499,
+    "per_class_f1": [
+      0.7641325536062378,
+      0.737527114967462
+    ],
+    "confusion_matrix": [
+      [
+        196,
+        48
+      ],
+      [
+        73,
+        170
+      ]
+    ]
+  },
+  "meta_learner_config": {
+    "type": "LogisticRegression",
+    "trained_on": "val_predictions",
+    "input_dim": 6,
+    "coefficients": [
+      [
+        -1.7166924958155234,
+        1.7673695820812947,
+        -0.44169885059328096,
+        0.492375438902547,
+        -0.9979729012641871,
+        1.0486496882651164
+      ]
+    ]
+  },
+  "all_model_test_f1": {
+    "v1_random_forest": 0.5504075504075504,
+    "v1_csp_lda": 0.5705489232878277,
+    "v1_eegnet": 0.708808053077099,
+    "v2_xgb": 0.5717635564240352,
+    "v2_rf": 0.555641918150789,
+    "v2_csp_lda": 0.5994204219024841,
+    "v2_eegnet": 0.7574701195219123,
+    "v2_ensemble_initial": 0.7185149245860141,
+    "v2_eegnet_fixed": 0.7508298342868499,
+    "v2_tcnet_fixed": 0.6745656420273466,
+    "v2_fbcnet_fixed": 0.7034004398578921,
+    "v2_deep_ensemble_fixed": 0.7508298342868499
+  }
+}

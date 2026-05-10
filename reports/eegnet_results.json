@@ -1,0 +1,88 @@
+{
+  "model_name": "eegnet",
+  "training_date": "2026-05-07T19:53:33.962542+00:00",
+  "windows_evaluated": [
+    {
+      "window": [
+        0.0,
+        4.0
+      ],
+      "val_accuracy": 0.7764705882352941,
+      "val_macro_f1": 0.7756944444444445,
+      "val_confusion_matrix": [
+        [
+          142,
+          29
+        ],
+        [
+          47,
+          122
+        ]
+      ],
+      "training_time_sec": 233.12341937504243,
+      "n_train_history_epochs": 87
+    },
+    {
+      "window": [
+        0.5,
+        2.5
+      ],
+      "val_accuracy": 0.6541554959785523,
+      "val_macro_f1": 0.6539963326501996,
+      "val_confusion_matrix": [
+        [
+          126,
+          61
+        ],
+        [
+          68,
+          118
+        ]
+      ],
+      "training_time_sec": 87.74770420900313,
+      "n_train_history_epochs": 54
+    }
+  ],
+  "winning_window": [
+    0.0,
+    4.0
+  ],
+  "test_metrics": {
+    "accuracy": 0.7094594594594594,
+    "macro_f1": 0.708808053077099,
+    "per_class_f1": [
+      0.6950354609929078,
+      0.7225806451612903
+    ],
+    "confusion_matrix": [
+      [
+        98,
+        48
+      ],
+      [
+        38,
+        112
+      ]
+    ]
+  },
+  "model_config": {
+    "architecture": "EEGNet (Lawhern 2018) F1=8 D=2 F2=16 kernel=64 dropout=0.5",
+    "n_params": 2770,
+    "channels": "all 64 EEG channels",
+    "normalization": "per-channel z-score, fit on train",
+    "training": {
+      "optimizer": "Adam",
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "batch_size": 64,
+      "max_epochs": 200,
+      "early_stopping_patience": 20,
+      "seed": 42,
+      "device": "mps"
+    }
+  },
+  "n_train_epochs": 1849,
+  "n_val_epochs": 340,
+  "n_test_epochs": 296,
+  "model_artifact": "models/eegnet_w0.0-4.0.pt"
+}

@@ -1,0 +1,25 @@
+{
+  "meta_learner_path": "models/v2_ensemble_meta.joblib",
+  "base_models": [
+    {
+      "name": "v2_xgb",
+      "input_type": "features_v2",
+      "model_path": "models/v2_xgb.joblib"
+    },
+    {
+      "name": "v2_rf",
+      "input_type": "features_v2",
+      "model_path": "models/v2_rf.joblib"
+    },
+    {
+      "name": "v2_csp_lda",
+      "input_type": "raw_64ch",
+      "model_path": "models/v2_csp_lda.joblib"
+    },
+    {
+      "name": "v2_eegnet",
+      "input_type": "raw_64ch",
+      "model_path": "models/v2_eegnet.pt"
+    }
+  ]
+}

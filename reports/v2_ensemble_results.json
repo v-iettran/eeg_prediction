@@ -1,0 +1,75 @@
+{
+  "model_name": "v2_ensemble",
+  "training_date": "2026-05-09T21:05:49.630092+00:00",
+  "data_version": "v2",
+  "rejection_threshold_uv": 300,
+  "n_train_epochs": 3119,
+  "n_val_epochs": 487,
+  "n_test_epochs": 487,
+  "base_models": [
+    {
+      "name": "v2_xgb",
+      "input_type": "features_v2",
+      "val_macro_f1": 0.6498534373098833,
+      "test_macro_f1": 0.5717635564240352
+    },
+    {
+      "name": "v2_rf",
+      "input_type": "features_v2",
+      "val_macro_f1": 0.6406510235490059,
+      "test_macro_f1": 0.555641918150789
+    },
+    {
+      "name": "v2_csp_lda",
+      "input_type": "raw_64ch",
+      "val_macro_f1": 0.6651565577954097,
+      "test_macro_f1": 0.5994204219024841
+    },
+    {
+      "name": "v2_eegnet",
+      "input_type": "raw_64ch",
+      "val_macro_f1": 0.7447071158008658,
+      "test_macro_f1": 0.7574701195219123
+    }
+  ],
+  "ensemble_test_metrics": {
+    "accuracy": 0.7186858316221766,
+    "macro_f1": 0.7185149245860141,
+    "per_class_f1": [
+      0.7115789473684211,
+      0.7254509018036072
+    ],
+    "confusion_matrix": [
+      [
+        169,
+        75
+      ],
+      [
+        62,
+        181
+      ]
+    ]
+  },
+  "meta_learner_config": {
+    "type": "LogisticRegression",
+    "trained_on": "val_predictions",
+    "input_dim": 8,
+    "coefficients": [
+      [
+        -0.5759249976557934,
+        0.6023120788075884,
+        -0.7968748331860553,
+        0.8232619124024837,
+        -0.8014677026583793,
+        0.827854781874812,
+        -2.062835513213024,
+        2.0892230458805825
+      ]
+    ]
+  },
+  "v1_baselines": {
+    "v1_random_forest": 0.5504075504075504,
+    "v1_csp_lda": 0.5705489232878277,
+    "v1_eegnet": 0.708808053077099
+  }
+}
