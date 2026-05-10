@@ -29,22 +29,6 @@ MODEL_REGISTRY = {
         "family": "Classical",
         "description": "Gradient boosted trees on 31-dim enriched band power features from C3, Cz, C4.",
     },
-    "SVM (RBF)": {
-        "path": "models/v2_svm.joblib",
-        "type": "sklearn",
-        "input": "features_v2",
-        "bandpass": (8, 30),
-        "family": "Classical",
-        "description": "RBF-kernel support vector machine on enriched motor-channel features.",
-    },
-    "Logistic Regression": {
-        "path": "models/v2_lr.joblib",
-        "type": "sklearn",
-        "input": "features_v2",
-        "bandpass": (8, 30),
-        "family": "Classical",
-        "description": "Regularized logistic regression on enriched motor-channel features.",
-    },
     "CSP+LDA": {
         "path": "models/v2_csp_lda.joblib",
         "type": "sklearn",

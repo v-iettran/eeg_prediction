@@ -18,8 +18,6 @@ MODEL_DISPLAY = [
     {"key": "v1_rf", "name": "Random Forest (V1)", "family": "Classical", "type": "Random Forest", "features": "6-dim band power (mu, beta)", "channels": "C3, Cz, C4", "source_file": "rf_results.json", "source_type": "v1"},
     {"key": "v2_rf", "name": "Random Forest (V2)", "family": "Classical", "type": "Random Forest", "features": "31-dim enriched band power", "channels": "C3, Cz, C4", "source_file": "v2_classical_results.json", "source_type": "array"},
     {"key": "v2_xgb", "name": "XGBoost", "family": "Classical", "type": "Gradient Boosted Trees", "features": "31-dim enriched band power", "channels": "C3, Cz, C4", "source_file": "v2_classical_results.json", "source_type": "array"},
-    {"key": "v2_svm", "name": "SVM (RBF)", "family": "Classical", "type": "Support Vector Machine", "features": "31-dim enriched band power", "channels": "C3, Cz, C4", "source_file": "v2_classical_results.json", "source_type": "array"},
-    {"key": "v2_lr", "name": "Logistic Regression", "family": "Classical", "type": "Logistic Regression", "features": "31-dim enriched band power", "channels": "C3, Cz, C4", "source_file": "v2_classical_results.json", "source_type": "array"},
     {"key": "v1_csp_lda", "name": "CSP+LDA (V1)", "family": "Spatial", "type": "CSP + LDA", "features": "CSP log-variance", "channels": "All 64 EEG channels", "source_file": "csp_lda_results.json", "source_type": "v1"},
     {"key": "v2_csp_lda", "name": "CSP+LDA (V2)", "family": "Spatial", "type": "CSP + LDA", "features": "CSP log-variance (8 components)", "channels": "All 64 EEG channels", "source_file": "v2_csp_eegnet_results.json", "source_type": "dict"},
     {"key": "v1_eegnet", "name": "EEGNet (V1)", "family": "Deep Learning", "type": "Compact CNN (Lawhern 2018)", "features": "Raw EEG -> learned features", "channels": "All 64 EEG channels", "source_file": "eegnet_results.json", "source_type": "v1"},
@@ -34,8 +32,6 @@ ALL_TEST_F1 = {
     "v1_eegnet": 0.708808053077099,
     "v2_rf": 0.5434064814185746,
     "v2_xgb": 0.5776924926162512,
-    "v2_svm": 0.33287671232876714,
-    "v2_lr": 0.37783118964098567,
     "v2_csp_lda": 0.5994204219024841,
     "v2_eegnet": 0.7574701195219123,
     "v2_tcnet": 0.6745656420273466,
@@ -130,7 +126,7 @@ def _render_pipeline_sankey():
         "<b>CSP</b><br>8 components",
         "<b>Raw Epochs</b><br>64 x 641",
         "<b>Filter Bank</b><br>5 bands",
-        "<b>Classical</b><br>RF/XGB/SVM/LR",
+        "<b>Classical</b><br>RF/XGB",
         "<b>CSP+LDA</b><br>F1 0.599",
         "<b>EEGNet</b><br>F1 0.757",
         "<b>EEG-TCNet</b><br>F1 0.675",
@@ -333,7 +329,7 @@ def _render_model_detail():
             f"**Input:** {info['features']}  \n"
             f"**Channels:** {info['channels']}"
         )
-        if info["key"] in {"v2_xgb", "v2_svm", "v2_lr", "v2_tcnet", "v2_fbcnet"}:
+        if info["key"] in {"v2_xgb", "v2_tcnet", "v2_fbcnet"}:
             st.caption(
                 "No V1 baseline is shown for this model because it was introduced in the V2 experiment set."
             )
@@ -420,7 +416,7 @@ def render_training_tab():
     )
     _render_v1_v2_comparison()
     st.caption(
-        "XGBoost, SVM, Logistic Regression, EEG-TCNet, and FBCNet do not have V1 "
+        "XGBoost, EEG-TCNet, and FBCNet do not have V1 "
         "baselines because they were introduced only in the V2 experiment set."
     )
 
