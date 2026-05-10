@@ -537,6 +537,28 @@ def _render_limitations_and_future():
         "CSP spatial pattern visualization, and per-epoch confidence calibration analysis."
     )
 
+def _render_references():
+    st.subheader("References")
+    st.markdown(
+        "1. Lawhern, V. J., et al. (2018). "
+        "EEGNet: A compact convolutional neural network for EEG-based brain–computer interfaces. "
+        "*Journal of Neural Engineering*, 15(5), 056013.\n\n"
+        "2. Ingolfsson, T. M., et al. (2020). "
+        "EEG-TCNet: An accurate temporal convolutional network for embedded motor-imagery "
+        "brain–machine interfaces. "
+        "*IEEE International Conference on Systems, Man, and Cybernetics (SMC)*, 2958–2965.\n\n"
+        "3. Mane, R., et al. (2021). "
+        "FBCNet: A multi-view filter bank convolutional neural network for brain–computer interface. "
+        "*arXiv preprint*, arXiv:2104.01233.\n\n"
+        "4. He, H. & Wu, D. (2020). "
+        "Transfer learning for brain–computer interfaces: A Euclidean space data alignment approach. "
+        "*IEEE Transactions on Biomedical Engineering*, 67(2), 399–410.\n\n"
+        "5. Goldberger, A. L., et al. (2000). "
+        "PhysioBank, PhysioToolkit, and PhysioNet: Components of a new research resource "
+        "for complex physiologic signals. "
+        "*Circulation*, 101(23), e215–e220."
+    )
+
 def render_training_tab():
     """Render the complete training summary tab."""
     _render_methodology()
@@ -574,3 +596,6 @@ def render_training_tab():
     _render_model_detail()
     st.divider()
     _render_limitations_and_future()
+
+    st.divider()
+    _render_references()
